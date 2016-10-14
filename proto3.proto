@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package prototest;
+
+message Small3 {
+	int32 a = 1;
+	fixed32 b = 2;
+	string c = 3;
+	repeated double d = 4;
+	Inner3 e = 5;
+	repeated Inner3 f = 6;
+}
+message Inner3 {
+	int64 a = 1;
+}
