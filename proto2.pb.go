@@ -14,6 +14,8 @@ It has these top-level messages:
 	Inner2
 	Small3
 	Inner3
+	Group1
+	Group2
 */
 package prototest
 
@@ -34,13 +36,15 @@ var _ = math.Inf
 const _ = proto.ProtoPackageIsVersion2 // please upgrade the proto package
 
 type Small2 struct {
-	A                *int32    `protobuf:"varint,1,req,name=a" json:"a,omitempty"`
-	B                *uint32   `protobuf:"fixed32,2,opt,name=b" json:"b,omitempty"`
-	C                *string   `protobuf:"bytes,3,opt,name=c" json:"c,omitempty"`
-	D                []float64 `protobuf:"fixed64,4,rep,name=d" json:"d,omitempty"`
-	E                *Inner2   `protobuf:"bytes,5,opt,name=e" json:"e,omitempty"`
-	F                []*Inner2 `protobuf:"bytes,6,rep,name=f" json:"f,omitempty"`
-	XXX_unrecognized []byte    `json:"-"`
+	A                *int32      `protobuf:"varint,1,req,name=a" json:"a,omitempty"`
+	B                *uint32     `protobuf:"fixed32,2,opt,name=b" json:"b,omitempty"`
+	C                *string     `protobuf:"bytes,3,opt,name=c" json:"c,omitempty"`
+	D                []float64   `protobuf:"fixed64,4,rep,name=d" json:"d,omitempty"`
+	E                *Inner2     `protobuf:"bytes,5,opt,name=e" json:"e,omitempty"`
+	F                []*Inner2   `protobuf:"bytes,6,rep,name=f" json:"f,omitempty"`
+	G                *Small2_G   `protobuf:"group,8,opt,name=G,json=g" json:"g,omitempty"`
+	H                []*Small2_H `protobuf:"group,10,rep,name=H,json=h" json:"h,omitempty"`
+	XXX_unrecognized []byte      `json:"-"`
 }
 
 func (m *Small2) Reset()                    { *m = Small2{} }
@@ -86,6 +90,20 @@ func (m *Small2) GetE() *Inner2 {
 func (m *Small2) GetF() []*Inner2 {
 	if m != nil {
 		return m.F
+	}
+	return nil
+}
+
+func (m *Small2) GetG() *Small2_G {
+	if m != nil {
+		return m.G
+	}
+	return nil
+}
+
+func (m *Small2) GetH() []*Small2_H {
+	if m != nil {
+		return m.H
 	}
 	return nil
 }
@@ -162,6 +180,28 @@ func (m *Small2) MergeFullCustom(b []byte) error {
 			}
 			b = b[x:]
 			m.F = append(m.F, &v)
+		case 8:
+			i, j := proto.FindEndGroup(b)
+			if i < 0 {
+				return proto.ErrInternalBadWireType
+			}
+			var v Small2_G
+			if err := v.MergeFullCustom(b[:i]); err != nil {
+				return err
+			}
+			b = b[j:]
+			m.G = &v
+		case 10:
+			i, j := proto.FindEndGroup(b)
+			if i < 0 {
+				return proto.ErrInternalBadWireType
+			}
+			var v Small2_H
+			if err := v.MergeFullCustom(b[:i]); err != nil {
+				return err
+			}
+			b = b[j:]
+			m.H = append(m.H, &v)
 		default:
 		}
 	}
@@ -199,6 +239,16 @@ var XXX_Unpack_Small2 = proto.UnpackMessageInfo{
 			Sub:    &XXX_Unpack_Inner2,
 			Unpack: proto.UnpackMessage_R,
 		},
+		8: {
+			Offset: unsafe.Offsetof(Small2{}.G),
+			Sub:    &XXX_Unpack_Small2_G,
+			Unpack: proto.UnpackGroup,
+		},
+		10: {
+			Offset: unsafe.Offsetof(Small2{}.H),
+			Sub:    &XXX_Unpack_Small2_H,
+			Unpack: proto.UnpackGroup_R,
+		},
 	},
 	Sparse:             nil,
 	UnrecognizedOffset: unsafe.Offsetof(Small2{}.XXX_unrecognized),
@@ -206,6 +256,119 @@ var XXX_Unpack_Small2 = proto.UnpackMessageInfo{
 
 func (m *Small2) MergeTableDriven(b []byte) error {
 	return proto.UnmarshalMsg(b, unsafe.Pointer(m), &XXX_Unpack_Small2)
+}
+
+type Small2_G struct {
+	X                *float32 `protobuf:"fixed32,9,opt,name=x" json:"x,omitempty"`
+	XXX_unrecognized []byte   `json:"-"`
+}
+
+func (m *Small2_G) Reset()                    { *m = Small2_G{} }
+func (m *Small2_G) String() string            { return proto.CompactTextString(m) }
+func (*Small2_G) ProtoMessage()               {}
+func (*Small2_G) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{0, 0} }
+
+func (m *Small2_G) GetX() float32 {
+	if m != nil && m.X != nil {
+		return *m.X
+	}
+	return 0
+}
+
+func (m *Small2_G) MergeFullCustom(b []byte) error {
+	for len(b) > 0 {
+		x, n := proto.DecodeVarint(b)
+		if n == 0 {
+			return proto.ErrInternalBadWireType
+		}
+		b = b[n:]
+		switch x >> 3 {
+		case 9:
+			if len(b) < 4 {
+				return proto.ErrInternalBadWireType
+			}
+			v := math.Float32frombits(uint32(b[0]) | uint32(b[1])<<8 | uint32(b[2])<<16 | uint32(b[3])<<24)
+			b = b[4:]
+			m.X = &v
+		default:
+		}
+	}
+	return nil
+}
+
+var XXX_Unpack_Small2_G = proto.UnpackMessageInfo{
+	Make: func() unsafe.Pointer {
+		return unsafe.Pointer(new(Small2_G))
+	},
+	Dense: []proto.UnpackFieldInfo{
+		9: {
+			Offset: unsafe.Offsetof(Small2_G{}.X),
+			Unpack: proto.UnpackFloat_2,
+		},
+	},
+	Sparse:             nil,
+	UnrecognizedOffset: unsafe.Offsetof(Small2_G{}.XXX_unrecognized),
+}
+
+func (m *Small2_G) MergeTableDriven(b []byte) error {
+	return proto.UnmarshalMsg(b, unsafe.Pointer(m), &XXX_Unpack_Small2_G)
+}
+
+type Small2_H struct {
+	X                *int32 `protobuf:"zigzag32,11,opt,name=x" json:"x,omitempty"`
+	XXX_unrecognized []byte `json:"-"`
+}
+
+func (m *Small2_H) Reset()                    { *m = Small2_H{} }
+func (m *Small2_H) String() string            { return proto.CompactTextString(m) }
+func (*Small2_H) ProtoMessage()               {}
+func (*Small2_H) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{0, 1} }
+
+func (m *Small2_H) GetX() int32 {
+	if m != nil && m.X != nil {
+		return *m.X
+	}
+	return 0
+}
+
+func (m *Small2_H) MergeFullCustom(b []byte) error {
+	for len(b) > 0 {
+		x, n := proto.DecodeVarint(b)
+		if n == 0 {
+			return proto.ErrInternalBadWireType
+		}
+		b = b[n:]
+		switch x >> 3 {
+		case 11:
+			x, n = proto.DecodeVarint(b)
+			if n == 0 {
+				return proto.ErrInternalBadWireType
+			}
+			b = b[n:]
+			v := int32(x>>1) ^ int32(x)<<31>>31
+			m.X = &v
+		default:
+		}
+	}
+	return nil
+}
+
+var XXX_Unpack_Small2_H = proto.UnpackMessageInfo{
+	Make: func() unsafe.Pointer {
+		return unsafe.Pointer(new(Small2_H))
+	},
+	Dense: []proto.UnpackFieldInfo{
+		11: {
+			Offset: unsafe.Offsetof(Small2_H{}.X),
+			Unpack: proto.UnpackSint32_2,
+		},
+	},
+	Sparse:             nil,
+	UnrecognizedOffset: unsafe.Offsetof(Small2_H{}.XXX_unrecognized),
+}
+
+func (m *Small2_H) MergeTableDriven(b []byte) error {
+	return proto.UnmarshalMsg(b, unsafe.Pointer(m), &XXX_Unpack_Small2_H)
 }
 
 type Inner2 struct {
@@ -266,21 +429,26 @@ func (m *Inner2) MergeTableDriven(b []byte) error {
 }
 func init() {
 	proto.RegisterType((*Small2)(nil), "prototest.Small2")
+	proto.RegisterType((*Small2_G)(nil), "prototest.Small2.G")
+	proto.RegisterType((*Small2_H)(nil), "prototest.Small2.H")
 	proto.RegisterType((*Inner2)(nil), "prototest.Inner2")
 }
 
 func init() { proto.RegisterFile("proto2.proto", fileDescriptor0) }
 
 var fileDescriptor0 = []byte{
-	// 148 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x09, 0x6e, 0x88, 0x02, 0xff, 0xe2, 0xe2, 0x29, 0x28, 0xca, 0x2f,
-	0xc9, 0x37, 0xd2, 0x03, 0x53, 0x42, 0x9c, 0x60, 0xaa, 0x24, 0xb5, 0xb8, 0x44, 0xa9, 0x89, 0x91,
-	0x8b, 0x2d, 0x38, 0x37, 0x31, 0x27, 0xc7, 0x48, 0x88, 0x87, 0x8b, 0x31, 0x51, 0x82, 0x51, 0x81,
-	0x49, 0x83, 0x35, 0x88, 0x31, 0x11, 0xc4, 0x4b, 0x92, 0x60, 0x52, 0x60, 0xd4, 0x60, 0x0f, 0x62,
-	0x4c, 0x02, 0xf1, 0x92, 0x25, 0x98, 0x81, 0x3c, 0xce, 0x20, 0xc6, 0x64, 0x10, 0x2f, 0x45, 0x82,
-	0x45, 0x81, 0x59, 0x83, 0x31, 0x88, 0x31, 0x45, 0x48, 0x9e, 0x8b, 0x31, 0x55, 0x82, 0x15, 0x28,
-	0xc7, 0x6d, 0x24, 0xa8, 0x07, 0x37, 0x59, 0xcf, 0x33, 0x2f, 0x2f, 0xb5, 0xc8, 0x28, 0x88, 0x31,
-	0x15, 0xa4, 0x20, 0x4d, 0x82, 0x0d, 0xa8, 0x1c, 0xbb, 0x82, 0x34, 0x25, 0x31, 0x2e, 0x36, 0x08,
-	0x07, 0xe1, 0x06, 0x66, 0xa0, 0x1b, 0x00, 0x01, 0x00, 0x00, 0xff, 0xff, 0xef, 0xf4, 0xde, 0x55,
-	0xb6, 0x00, 0x00, 0x00,
+	// 205 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x09, 0x6e, 0x88, 0x02, 0xff, 0x74, 0x8f, 0x31, 0x4e, 0xc3, 0x40,
+	0x10, 0x45, 0xf5, 0xbd, 0xc4, 0xe0, 0x49, 0x1a, 0x2f, 0x12, 0x1a, 0xd1, 0x30, 0xa4, 0x9a, 0x6a,
+	0x8b, 0xbd, 0x44, 0x42, 0x3b, 0x9c, 0x60, 0x93, 0x6c, 0x92, 0x22, 0xc4, 0xc8, 0xb8, 0xf0, 0xa9,
+	0x39, 0x03, 0x5a, 0x5b, 0x02, 0x0a, 0xa8, 0xbe, 0xde, 0xd7, 0xd3, 0xee, 0x1f, 0x5a, 0xbd, 0xf7,
+	0xdd, 0xd0, 0xc5, 0x30, 0x85, 0x6f, 0xa6, 0x18, 0xf2, 0xc7, 0xb0, 0xfe, 0x04, 0xd5, 0xaf, 0x6f,
+	0xe9, 0x72, 0x89, 0x7e, 0x45, 0x48, 0x0c, 0xa9, 0x74, 0x61, 0x48, 0x85, 0x76, 0x5c, 0x09, 0xf4,
+	0xd6, 0xb0, 0x2b, 0xb4, 0x67, 0x27, 0xd0, 0xc6, 0xb0, 0x2f, 0x74, 0xe0, 0x1b, 0x71, 0x0a, 0xc3,
+	0xc1, 0x3f, 0x11, 0x32, 0x2f, 0x04, 0xba, 0x8c, 0x6d, 0xf8, 0x7e, 0x39, 0xbc, 0x5c, 0xaf, 0xb9,
+	0x8f, 0x86, 0x5c, 0x84, 0x23, 0xd7, 0xe2, 0xfe, 0x11, 0x8e, 0xfe, 0x99, 0x70, 0xe2, 0x3b, 0x81,
+	0x52, 0xbc, 0xff, 0x25, 0xcc, 0xbb, 0xc2, 0xc6, 0x70, 0x2a, 0xca, 0x99, 0x49, 0xdc, 0xdf, 0xca,
+	0xd6, 0x70, 0x7e, 0x6c, 0x09, 0x9b, 0x32, 0x6d, 0xe4, 0x46, 0xa0, 0x95, 0x61, 0x2c, 0xd5, 0x76,
+	0xae, 0x96, 0x02, 0x6d, 0x0d, 0xe3, 0xfa, 0x81, 0xea, 0xf9, 0xe3, 0x9f, 0x7b, 0x9d, 0x21, 0x7d,
+	0x05, 0x00, 0x00, 0xff, 0xff, 0x7b, 0x49, 0x53, 0x11, 0x22, 0x01, 0x00, 0x00,
 }

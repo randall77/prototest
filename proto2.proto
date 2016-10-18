@@ -3,14 +3,20 @@ syntax = "proto2";
 package prototest;
 
 message Small2 {
-	required int32 a = 1;
-	optional fixed32 b = 2;
-	optional string c = 3;
-	repeated double d = 4;
-	optional Inner2 e = 5;
-	repeated Inner2 f = 6;
+  required int32 a = 1;
+  optional fixed32 b = 2;
+  optional string c = 3;
+  repeated double d = 4;
+  optional Inner2 e = 5;
+  repeated Inner2 f = 6;
+  optional group G = 8 {
+    optional float x = 9;
+  }
+    repeated group H = 10 {
+      optional sint32 x = 11;
+    }
 }
 
 message Inner2 {
-	required int64 a = 1;
+  required int64 a = 1;
 }

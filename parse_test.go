@@ -10,6 +10,7 @@ func TestFullCustom(t *testing.T) {
 	x.A = proto.Int32(5)
 	x.B = proto.Uint32(7)
 	x.C = proto.String("abc")
+	x.G = &Small2_G{X: proto.Float32(2.5)}
 
 	data, err := proto.Marshal(&x)
 	if err != nil {
@@ -28,6 +29,9 @@ func TestFullCustom(t *testing.T) {
 	if x.GetC() != y.GetC() {
 		panic("bad C: " + y.GetC())
 	}
+	if x.GetG().GetX() != y.GetG().GetX() {
+		panic("bad G.X")
+	}
 }
 
 func TestTableDriven(t *testing.T) {
@@ -36,6 +40,7 @@ func TestTableDriven(t *testing.T) {
 	x.A = proto.Int32(5)
 	x.B = proto.Uint32(7)
 	x.C = proto.String("abc")
+	x.G = &Small2_G{X: proto.Float32(2.5)}
 
 	data, err := proto.Marshal(&x)
 	if err != nil {
@@ -54,6 +59,9 @@ func TestTableDriven(t *testing.T) {
 	if x.GetC() != y.GetC() {
 		panic("bad C: " + y.GetC())
 	}
+	if x.GetG().GetX() != y.GetG().GetX() {
+		panic("bad G.X")
+	}
 }
 
 func BenchmarkUnmarshal2(b *testing.B) {
@@ -63,6 +71,7 @@ func BenchmarkUnmarshal2(b *testing.B) {
 	x.A = proto.Int32(5)
 	x.B = proto.Uint32(7)
 	x.C = proto.String("abc")
+	x.G = &Small2_G{X: proto.Float32(2.5)}
 
 	data, err := proto.Marshal(&x)
 	if err != nil {
@@ -85,6 +94,7 @@ func BenchmarkUnmarshal2Buf(b *testing.B) {
 	x.A = proto.Int32(5)
 	x.B = proto.Uint32(7)
 	x.C = proto.String("abc")
+	x.G = &Small2_G{X: proto.Float32(2.5)}
 
 	data, err := proto.Marshal(&x)
 	if err != nil {
@@ -111,6 +121,7 @@ func BenchmarkUnmarshal3(b *testing.B) {
 	x.A = 5
 	x.B = 7
 	x.C = "abc"
+	x.G = &Group1{X: 2.5}
 
 	data, err := proto.Marshal(&x)
 	if err != nil {
@@ -134,6 +145,7 @@ func BenchmarkUnmarshal3Buf(b *testing.B) {
 	x.A = 5
 	x.B = 7
 	x.C = "abc"
+	x.G = &Group1{X: 2.5}
 
 	data, err := proto.Marshal(&x)
 	if err != nil {
@@ -160,6 +172,7 @@ func BenchmarkMergeFullCustom2(b *testing.B) {
 	x.A = proto.Int32(5)
 	x.B = proto.Uint32(7)
 	x.C = proto.String("abc")
+	x.G = &Small2_G{X: proto.Float32(2.5)}
 
 	data, err := proto.Marshal(&x)
 	if err != nil {
@@ -181,6 +194,7 @@ func BenchmarkMergeFullCustom3(b *testing.B) {
 	x.A = 5
 	x.B = 7
 	x.C = "abc"
+	x.G = &Group1{X: 2.5}
 
 	data, err := proto.Marshal(&x)
 	if err != nil {
@@ -202,6 +216,7 @@ func BenchmarkMergeTableDriven2(b *testing.B) {
 	x.A = proto.Int32(5)
 	x.B = proto.Uint32(7)
 	x.C = proto.String("abc")
+	x.G = &Small2_G{X: proto.Float32(2.5)}
 
 	data, err := proto.Marshal(&x)
 	if err != nil {
@@ -223,6 +238,7 @@ func BenchmarkMergeTableDriven3(b *testing.B) {
 	x.A = 5
 	x.B = 7
 	x.C = "abc"
+	x.G = &Group1{X: 2.5}
 
 	data, err := proto.Marshal(&x)
 	if err != nil {
