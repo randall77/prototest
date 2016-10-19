@@ -13,22 +13,74 @@ import unsafe "unsafe"
 var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
+var _ = unsafe.Pointer(nil)
+
+type Small3_Enum int32
+
+const (
+	Small3_EA Small3_Enum = 0
+	Small3_EB Small3_Enum = 1
+	Small3_EC Small3_Enum = 2
+)
+
+var Small3_Enum_name = map[int32]string{
+	0: "EA",
+	1: "EB",
+	2: "EC",
+}
+var Small3_Enum_value = map[string]int32{
+	"EA": 0,
+	"EB": 1,
+	"EC": 2,
+}
+
+func (x Small3_Enum) String() string {
+	return proto.EnumName(Small3_Enum_name, int32(x))
+}
+func (Small3_Enum) EnumDescriptor() ([]byte, []int) { return fileDescriptor1, []int{0, 0} }
 
 type Small3 struct {
-	A int32     `protobuf:"varint,1,opt,name=a" json:"a,omitempty"`
-	B uint32    `protobuf:"fixed32,2,opt,name=b" json:"b,omitempty"`
-	C string    `protobuf:"bytes,3,opt,name=c" json:"c,omitempty"`
-	D []float64 `protobuf:"fixed64,4,rep,packed,name=d" json:"d,omitempty"`
-	E *Inner3   `protobuf:"bytes,5,opt,name=e" json:"e,omitempty"`
-	F []*Inner3 `protobuf:"bytes,6,rep,name=f" json:"f,omitempty"`
-	G *Group1   `protobuf:"bytes,8,opt,name=g" json:"g,omitempty"`
-	H []*Group2 `protobuf:"bytes,9,rep,name=h" json:"h,omitempty"`
+	A int32            `protobuf:"varint,1,opt,name=a" json:"a,omitempty"`
+	B uint32           `protobuf:"fixed32,2,opt,name=b" json:"b,omitempty"`
+	C string           `protobuf:"bytes,3,opt,name=c" json:"c,omitempty"`
+	D []float64        `protobuf:"fixed64,4,rep,packed,name=d" json:"d,omitempty"`
+	E *Inner3          `protobuf:"bytes,5,opt,name=e" json:"e,omitempty"`
+	F []*Inner3        `protobuf:"bytes,6,rep,name=f" json:"f,omitempty"`
+	G *Group1          `protobuf:"bytes,8,opt,name=g" json:"g,omitempty"`
+	H []*Group2        `protobuf:"bytes,9,rep,name=h" json:"h,omitempty"`
+	I Small3_Enum      `protobuf:"varint,12,opt,name=i,enum=prototest.Small3_Enum" json:"i,omitempty"`
+	J map[int32]string `protobuf:"bytes,13,rep,name=j" json:"j,omitempty" protobuf_key:"varint,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	// Types that are valid to be assigned to Oneof:
+	//	*Small3_X
+	//	*Small3_Y
+	Oneof isSmall3_Oneof `protobuf_oneof:"Oneof"`
 }
 
 func (m *Small3) Reset()                    { *m = Small3{} }
 func (m *Small3) String() string            { return proto.CompactTextString(m) }
 func (*Small3) ProtoMessage()               {}
 func (*Small3) Descriptor() ([]byte, []int) { return fileDescriptor1, []int{0} }
+
+type isSmall3_Oneof interface {
+	isSmall3_Oneof()
+}
+
+type Small3_X struct {
+	X int64 `protobuf:"varint,14,opt,name=x,oneof"`
+}
+type Small3_Y struct {
+	Y string `protobuf:"bytes,15,opt,name=y,oneof"`
+}
+
+func (*Small3_X) isSmall3_Oneof() {}
+func (*Small3_Y) isSmall3_Oneof() {}
+
+func (m *Small3) GetOneof() isSmall3_Oneof {
+	if m != nil {
+		return m.Oneof
+	}
+	return nil
+}
 
 func (m *Small3) GetE() *Inner3 {
 	if m != nil {
@@ -56,6 +108,92 @@ func (m *Small3) GetH() []*Group2 {
 		return m.H
 	}
 	return nil
+}
+
+func (m *Small3) GetJ() map[int32]string {
+	if m != nil {
+		return m.J
+	}
+	return nil
+}
+
+func (m *Small3) GetX() int64 {
+	if x, ok := m.GetOneof().(*Small3_X); ok {
+		return x.X
+	}
+	return 0
+}
+
+func (m *Small3) GetY() string {
+	if x, ok := m.GetOneof().(*Small3_Y); ok {
+		return x.Y
+	}
+	return ""
+}
+
+// XXX_OneofFuncs is for the internal use of the proto package.
+func (*Small3) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
+	return _Small3_OneofMarshaler, _Small3_OneofUnmarshaler, _Small3_OneofSizer, []interface{}{
+		(*Small3_X)(nil),
+		(*Small3_Y)(nil),
+	}
+}
+
+func _Small3_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
+	m := msg.(*Small3)
+	// Oneof
+	switch x := m.Oneof.(type) {
+	case *Small3_X:
+		b.EncodeVarint(14<<3 | proto.WireVarint)
+		b.EncodeVarint(uint64(x.X))
+	case *Small3_Y:
+		b.EncodeVarint(15<<3 | proto.WireBytes)
+		b.EncodeStringBytes(x.Y)
+	case nil:
+	default:
+		return fmt.Errorf("Small3.Oneof has unexpected type %T", x)
+	}
+	return nil
+}
+
+func _Small3_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
+	m := msg.(*Small3)
+	switch tag {
+	case 14: // Oneof.x
+		if wire != proto.WireVarint {
+			return true, proto.ErrInternalBadWireType
+		}
+		x, err := b.DecodeVarint()
+		m.Oneof = &Small3_X{int64(x)}
+		return true, err
+	case 15: // Oneof.y
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		x, err := b.DecodeStringBytes()
+		m.Oneof = &Small3_Y{x}
+		return true, err
+	default:
+		return false, nil
+	}
+}
+
+func _Small3_OneofSizer(msg proto.Message) (n int) {
+	m := msg.(*Small3)
+	// Oneof
+	switch x := m.Oneof.(type) {
+	case *Small3_X:
+		n += proto.SizeVarint(14<<3 | proto.WireVarint)
+		n += proto.SizeVarint(uint64(x.X))
+	case *Small3_Y:
+		n += proto.SizeVarint(15<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(len(x.Y)))
+		n += len(x.Y)
+	case nil:
+	default:
+		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
+	}
+	return n
 }
 
 func (m *Small3) MergeFullCustom(b []byte) error {
@@ -160,7 +298,48 @@ func (m *Small3) MergeFullCustom(b []byte) error {
 			}
 			b = b[x:]
 			m.H = append(m.H, &v)
+		case 12:
+			x, n = proto.DecodeVarint(b)
+			if n == 0 {
+				return proto.ErrInternalBadWireType
+			}
+			b = b[n:]
+			v := Small3_Enum(x)
+			m.I = v
+		case 13:
+			x, n = proto.DecodeVarint(b)
+			if n == 0 {
+				return proto.ErrInternalBadWireType
+			}
+			b = b[n:]
+			if uint64(len(b)) < x {
+				return proto.ErrInternalBadWireType
+			}
+			b = b[x:]
+		case 14:
+			x, n = proto.DecodeVarint(b)
+			if n == 0 {
+				return proto.ErrInternalBadWireType
+			}
+			b = b[n:]
+			v := int64(x)
+			w := Small3_X{X: v}
+			m.Oneof = &w
+		case 15:
+			x, n = proto.DecodeVarint(b)
+			if n == 0 {
+				return proto.ErrInternalBadWireType
+			}
+			b = b[n:]
+			if uint64(len(b)) < x {
+				return proto.ErrInternalBadWireType
+			}
+			v := string(b[:x])
+			b = b[x:]
+			w := Small3_Y{Y: v}
+			m.Oneof = &w
 		default:
+			return proto.ErrInternalBadWireType
 		}
 	}
 	return nil
@@ -207,6 +386,10 @@ var XXX_Unpack_Small3 = proto.UnpackMessageInfo{
 			Sub:    &XXX_Unpack_Group2,
 			Unpack: proto.UnpackMessage_R,
 		},
+		12: {
+			Offset: unsafe.Offsetof(Small3{}.I),
+			Unpack: proto.UnpackEnum_3,
+		},
 	},
 	Sparse:             nil,
 	UnrecognizedOffset: 1,
@@ -242,6 +425,7 @@ func (m *Inner3) MergeFullCustom(b []byte) error {
 			v := int64(x)
 			m.A = v
 		default:
+			return proto.ErrInternalBadWireType
 		}
 	}
 	return nil
@@ -290,6 +474,7 @@ func (m *Group1) MergeFullCustom(b []byte) error {
 			b = b[4:]
 			m.X = v
 		default:
+			return proto.ErrInternalBadWireType
 		}
 	}
 	return nil
@@ -339,6 +524,7 @@ func (m *Group2) MergeFullCustom(b []byte) error {
 			v := int32(x>>1) ^ int32(x)<<31>>31
 			m.X = v
 		default:
+			return proto.ErrInternalBadWireType
 		}
 	}
 	return nil
@@ -366,23 +552,32 @@ func init() {
 	proto.RegisterType((*Inner3)(nil), "prototest.Inner3")
 	proto.RegisterType((*Group1)(nil), "prototest.Group1")
 	proto.RegisterType((*Group2)(nil), "prototest.Group2")
+	proto.RegisterEnum("prototest.Small3_Enum", Small3_Enum_name, Small3_Enum_value)
 }
 
 func init() { proto.RegisterFile("proto3.proto", fileDescriptor1) }
 
 var fileDescriptor1 = []byte{
-	// 200 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x09, 0x6e, 0x88, 0x02, 0xff, 0x74, 0x90, 0xc1, 0x6a, 0x84, 0x30,
-	0x14, 0x45, 0xb9, 0x93, 0x4e, 0x5a, 0xd3, 0xd9, 0x8c, 0x8b, 0xf2, 0x76, 0x0d, 0xb3, 0xca, 0x4a,
-	0xa8, 0x7e, 0x44, 0xe9, 0xf6, 0xf5, 0x0b, 0xe2, 0x18, 0x75, 0x61, 0x55, 0xac, 0x05, 0x3f, 0xb0,
-	0x1f, 0x56, 0x5e, 0x04, 0x5d, 0x48, 0x57, 0x8f, 0x7b, 0x38, 0x1c, 0x48, 0xcc, 0x65, 0x9c, 0x86,
-	0x79, 0x28, 0xb2, 0x78, 0xd2, 0x24, 0x9e, 0x39, 0x7c, 0xcf, 0xb7, 0x5f, 0x18, 0xfd, 0xf9, 0xe5,
-	0xbb, 0xae, 0x48, 0x2f, 0x06, 0x9e, 0x60, 0xe1, 0xce, 0x0c, 0x2f, 0xab, 0xa4, 0x93, 0x85, 0x7b,
-	0x64, 0x94, 0xb2, 0xee, 0xa4, 0x2c, 0x5c, 0xc2, 0xb8, 0xcb, 0xaa, 0xe8, 0xc1, 0x2a, 0x07, 0x46,
-	0x95, 0xbe, 0x1a, 0x04, 0x3a, 0x5b, 0xb8, 0xe7, 0xfc, 0x9a, 0x6d, 0xe5, 0xec, 0xa3, 0xef, 0xc3,
-	0x54, 0x30, 0x82, 0x08, 0x35, 0x69, 0xab, 0xfe, 0x11, 0x6a, 0x11, 0x1a, 0x7a, 0x3a, 0x14, 0xde,
-	0xa7, 0xe1, 0x67, 0x7c, 0x63, 0x34, 0x22, 0xb4, 0x94, 0x1c, 0x0a, 0x51, 0xc8, 0x19, 0xed, 0xed,
-	0xc5, 0xe8, 0x35, 0xb7, 0xbf, 0x42, 0x31, 0xbc, 0xf0, 0xb5, 0x22, 0x7c, 0x89, 0xfc, 0xc4, 0x58,
-	0x36, 0x9e, 0xef, 0xfc, 0xca, 0x58, 0x4a, 0xbd, 0xfe, 0xd3, 0x5f, 0x00, 0x00, 0x00, 0xff, 0xff,
-	0x7c, 0xad, 0xd3, 0x79, 0x30, 0x01, 0x00, 0x00,
+	// 324 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x09, 0x6e, 0x88, 0x02, 0xff, 0x74, 0x91, 0xcf, 0x4a, 0xeb, 0x40,
+	0x18, 0xc5, 0x7b, 0x92, 0x26, 0xbd, 0xf9, 0x6e, 0x6f, 0x6f, 0x3a, 0x48, 0x19, 0x5c, 0xe8, 0x50,
+	0x44, 0xb2, 0x0a, 0x98, 0xba, 0x10, 0x77, 0x56, 0x8a, 0x7f, 0x36, 0xc2, 0xe7, 0x13, 0xa4, 0x6d,
+	0xfa, 0xcf, 0x36, 0x29, 0x31, 0x95, 0xe4, 0x31, 0x7c, 0x63, 0x99, 0x89, 0xb4, 0x42, 0x71, 0x75,
+	0x72, 0x0e, 0x3f, 0x0e, 0x99, 0xf3, 0x51, 0x7b, 0x9b, 0x67, 0x45, 0x36, 0x08, 0x8d, 0x08, 0xcf,
+	0x48, 0x91, 0xbc, 0x17, 0xfd, 0x4f, 0x9b, 0xdc, 0xd7, 0x4d, 0xbc, 0x5e, 0x0f, 0x44, 0x9b, 0x10,
+	0x4b, 0x28, 0x04, 0x0e, 0x23, 0xd6, 0x6e, 0x2c, 0x2d, 0x85, 0xa0, 0xc5, 0x18, 0x6b, 0x37, 0x91,
+	0xb6, 0x42, 0xe0, 0x31, 0x26, 0xda, 0x4d, 0x65, 0x53, 0xd9, 0x01, 0x18, 0x53, 0x71, 0x4e, 0x48,
+	0xa4, 0xa3, 0x10, 0xfc, 0x8d, 0xba, 0xe1, 0xbe, 0x39, 0x7c, 0x4a, 0xd3, 0x24, 0x1f, 0x30, 0x12,
+	0x0d, 0xcc, 0xa4, 0xab, 0xec, 0x5f, 0x80, 0x99, 0x06, 0xe6, 0xf2, 0xcf, 0x51, 0xc3, 0x43, 0x9e,
+	0xed, 0xb6, 0x57, 0x8c, 0xb9, 0x06, 0x16, 0xd2, 0x3b, 0x6a, 0x30, 0x40, 0xc4, 0x58, 0x88, 0x0b,
+	0xc2, 0x52, 0xb6, 0x15, 0x82, 0x4e, 0xd4, 0xfb, 0x01, 0xd4, 0x2f, 0x0b, 0x47, 0xe9, 0x6e, 0xc3,
+	0x58, 0x8a, 0x4b, 0xc2, 0x4a, 0xfe, 0x33, 0x35, 0xf2, 0x98, 0x7a, 0x1e, 0xa5, 0x45, 0x5e, 0x31,
+	0x56, 0xa2, 0x43, 0x28, 0x65, 0x47, 0x21, 0xb0, 0x1f, 0x1b, 0x8c, 0x52, 0xfb, 0x4a, 0xfe, 0xd7,
+	0xaf, 0xd7, 0xbe, 0x3a, 0xbd, 0x26, 0xb7, 0x86, 0x85, 0x4f, 0xf6, 0x5b, 0x52, 0x7d, 0xaf, 0xa6,
+	0x3f, 0xc5, 0x09, 0x39, 0x1f, 0xf1, 0x7a, 0x97, 0x98, 0xed, 0x3c, 0xae, 0xcd, 0xad, 0x75, 0x83,
+	0xfe, 0x19, 0x35, 0xf5, 0x8f, 0x08, 0x97, 0xac, 0xd1, 0x9d, 0xdf, 0x30, 0x3a, 0xf4, 0x61, 0xf4,
+	0xde, 0xb7, 0x86, 0x2d, 0x72, 0x5e, 0xd2, 0x24, 0x9b, 0xf5, 0x7b, 0xe4, 0xd6, 0xdb, 0x1c, 0x4e,
+	0x62, 0x33, 0x62, 0x9d, 0xd7, 0x93, 0xe8, 0xbc, 0x34, 0xb9, 0xc5, 0x28, 0xf7, 0x79, 0x74, 0xc8,
+	0xbb, 0x8c, 0x72, 0xec, 0xd6, 0x47, 0xff, 0x0a, 0x00, 0x00, 0xff, 0xff, 0xe8, 0x9f, 0x16, 0x0d,
+	0xfd, 0x01, 0x00, 0x00,
 }

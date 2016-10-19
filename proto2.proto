@@ -15,6 +15,17 @@ message Small2 {
     repeated group H = 10 {
       optional sint32 x = 11;
     }
+      enum Enum {
+        EA = 0;
+        EB = 1;
+        EC = 2;
+      }
+  optional Enum i = 12;
+  map<int32,string> j = 13;
+  oneof Oneof {
+    int64 x = 14;
+    string y = 15;
+  }
 }
 
 message Inner2 {

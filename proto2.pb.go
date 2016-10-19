@@ -28,6 +28,7 @@ import unsafe "unsafe"
 var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
+var _ = unsafe.Pointer(nil)
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the proto package it is being compiled against.
@@ -35,22 +36,86 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.ProtoPackageIsVersion2 // please upgrade the proto package
 
+type Small2_Enum int32
+
+const (
+	Small2_EA Small2_Enum = 0
+	Small2_EB Small2_Enum = 1
+	Small2_EC Small2_Enum = 2
+)
+
+var Small2_Enum_name = map[int32]string{
+	0: "EA",
+	1: "EB",
+	2: "EC",
+}
+var Small2_Enum_value = map[string]int32{
+	"EA": 0,
+	"EB": 1,
+	"EC": 2,
+}
+
+func (x Small2_Enum) Enum() *Small2_Enum {
+	p := new(Small2_Enum)
+	*p = x
+	return p
+}
+func (x Small2_Enum) String() string {
+	return proto.EnumName(Small2_Enum_name, int32(x))
+}
+func (x *Small2_Enum) UnmarshalJSON(data []byte) error {
+	value, err := proto.UnmarshalJSONEnum(Small2_Enum_value, data, "Small2_Enum")
+	if err != nil {
+		return err
+	}
+	*x = Small2_Enum(value)
+	return nil
+}
+func (Small2_Enum) EnumDescriptor() ([]byte, []int) { return fileDescriptor0, []int{0, 0} }
+
 type Small2 struct {
-	A                *int32      `protobuf:"varint,1,req,name=a" json:"a,omitempty"`
-	B                *uint32     `protobuf:"fixed32,2,opt,name=b" json:"b,omitempty"`
-	C                *string     `protobuf:"bytes,3,opt,name=c" json:"c,omitempty"`
-	D                []float64   `protobuf:"fixed64,4,rep,name=d" json:"d,omitempty"`
-	E                *Inner2     `protobuf:"bytes,5,opt,name=e" json:"e,omitempty"`
-	F                []*Inner2   `protobuf:"bytes,6,rep,name=f" json:"f,omitempty"`
-	G                *Small2_G   `protobuf:"group,8,opt,name=G,json=g" json:"g,omitempty"`
-	H                []*Small2_H `protobuf:"group,10,rep,name=H,json=h" json:"h,omitempty"`
-	XXX_unrecognized []byte      `json:"-"`
+	A *int32           `protobuf:"varint,1,req,name=a" json:"a,omitempty"`
+	B *uint32          `protobuf:"fixed32,2,opt,name=b" json:"b,omitempty"`
+	C *string          `protobuf:"bytes,3,opt,name=c" json:"c,omitempty"`
+	D []float64        `protobuf:"fixed64,4,rep,name=d" json:"d,omitempty"`
+	E *Inner2          `protobuf:"bytes,5,opt,name=e" json:"e,omitempty"`
+	F []*Inner2        `protobuf:"bytes,6,rep,name=f" json:"f,omitempty"`
+	G *Small2_G        `protobuf:"group,8,opt,name=G,json=g" json:"g,omitempty"`
+	H []*Small2_H      `protobuf:"group,10,rep,name=H,json=h" json:"h,omitempty"`
+	I *Small2_Enum     `protobuf:"varint,12,opt,name=i,enum=prototest.Small2_Enum" json:"i,omitempty"`
+	J map[int32]string `protobuf:"bytes,13,rep,name=j" json:"j,omitempty" protobuf_key:"varint,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	// Types that are valid to be assigned to Oneof:
+	//	*Small2_X
+	//	*Small2_Y
+	Oneof            isSmall2_Oneof `protobuf_oneof:"Oneof"`
+	XXX_unrecognized []byte         `json:"-"`
 }
 
 func (m *Small2) Reset()                    { *m = Small2{} }
 func (m *Small2) String() string            { return proto.CompactTextString(m) }
 func (*Small2) ProtoMessage()               {}
 func (*Small2) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{0} }
+
+type isSmall2_Oneof interface {
+	isSmall2_Oneof()
+}
+
+type Small2_X struct {
+	X int64 `protobuf:"varint,14,opt,name=x,oneof"`
+}
+type Small2_Y struct {
+	Y string `protobuf:"bytes,15,opt,name=y,oneof"`
+}
+
+func (*Small2_X) isSmall2_Oneof() {}
+func (*Small2_Y) isSmall2_Oneof() {}
+
+func (m *Small2) GetOneof() isSmall2_Oneof {
+	if m != nil {
+		return m.Oneof
+	}
+	return nil
+}
 
 func (m *Small2) GetA() int32 {
 	if m != nil && m.A != nil {
@@ -106,6 +171,99 @@ func (m *Small2) GetH() []*Small2_H {
 		return m.H
 	}
 	return nil
+}
+
+func (m *Small2) GetI() Small2_Enum {
+	if m != nil && m.I != nil {
+		return *m.I
+	}
+	return Small2_EA
+}
+
+func (m *Small2) GetJ() map[int32]string {
+	if m != nil {
+		return m.J
+	}
+	return nil
+}
+
+func (m *Small2) GetX() int64 {
+	if x, ok := m.GetOneof().(*Small2_X); ok {
+		return x.X
+	}
+	return 0
+}
+
+func (m *Small2) GetY() string {
+	if x, ok := m.GetOneof().(*Small2_Y); ok {
+		return x.Y
+	}
+	return ""
+}
+
+// XXX_OneofFuncs is for the internal use of the proto package.
+func (*Small2) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
+	return _Small2_OneofMarshaler, _Small2_OneofUnmarshaler, _Small2_OneofSizer, []interface{}{
+		(*Small2_X)(nil),
+		(*Small2_Y)(nil),
+	}
+}
+
+func _Small2_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
+	m := msg.(*Small2)
+	// Oneof
+	switch x := m.Oneof.(type) {
+	case *Small2_X:
+		b.EncodeVarint(14<<3 | proto.WireVarint)
+		b.EncodeVarint(uint64(x.X))
+	case *Small2_Y:
+		b.EncodeVarint(15<<3 | proto.WireBytes)
+		b.EncodeStringBytes(x.Y)
+	case nil:
+	default:
+		return fmt.Errorf("Small2.Oneof has unexpected type %T", x)
+	}
+	return nil
+}
+
+func _Small2_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
+	m := msg.(*Small2)
+	switch tag {
+	case 14: // Oneof.x
+		if wire != proto.WireVarint {
+			return true, proto.ErrInternalBadWireType
+		}
+		x, err := b.DecodeVarint()
+		m.Oneof = &Small2_X{int64(x)}
+		return true, err
+	case 15: // Oneof.y
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		x, err := b.DecodeStringBytes()
+		m.Oneof = &Small2_Y{x}
+		return true, err
+	default:
+		return false, nil
+	}
+}
+
+func _Small2_OneofSizer(msg proto.Message) (n int) {
+	m := msg.(*Small2)
+	// Oneof
+	switch x := m.Oneof.(type) {
+	case *Small2_X:
+		n += proto.SizeVarint(14<<3 | proto.WireVarint)
+		n += proto.SizeVarint(uint64(x.X))
+	case *Small2_Y:
+		n += proto.SizeVarint(15<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(len(x.Y)))
+		n += len(x.Y)
+	case nil:
+	default:
+		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
+	}
+	return n
 }
 
 func (m *Small2) MergeFullCustom(b []byte) error {
@@ -202,7 +360,48 @@ func (m *Small2) MergeFullCustom(b []byte) error {
 			}
 			b = b[j:]
 			m.H = append(m.H, &v)
+		case 12:
+			x, n = proto.DecodeVarint(b)
+			if n == 0 {
+				return proto.ErrInternalBadWireType
+			}
+			b = b[n:]
+			v := Small2_Enum(x)
+			m.I = &v
+		case 13:
+			x, n = proto.DecodeVarint(b)
+			if n == 0 {
+				return proto.ErrInternalBadWireType
+			}
+			b = b[n:]
+			if uint64(len(b)) < x {
+				return proto.ErrInternalBadWireType
+			}
+			b = b[x:]
+		case 14:
+			x, n = proto.DecodeVarint(b)
+			if n == 0 {
+				return proto.ErrInternalBadWireType
+			}
+			b = b[n:]
+			v := int64(x)
+			w := Small2_X{X: v}
+			m.Oneof = &w
+		case 15:
+			x, n = proto.DecodeVarint(b)
+			if n == 0 {
+				return proto.ErrInternalBadWireType
+			}
+			b = b[n:]
+			if uint64(len(b)) < x {
+				return proto.ErrInternalBadWireType
+			}
+			v := string(b[:x])
+			b = b[x:]
+			w := Small2_Y{Y: v}
+			m.Oneof = &w
 		default:
+			return proto.ErrInternalBadWireType
 		}
 	}
 	return nil
@@ -249,6 +448,10 @@ var XXX_Unpack_Small2 = proto.UnpackMessageInfo{
 			Sub:    &XXX_Unpack_Small2_H,
 			Unpack: proto.UnpackGroup_R,
 		},
+		12: {
+			Offset: unsafe.Offsetof(Small2{}.I),
+			Unpack: proto.UnpackEnum_2,
+		},
 	},
 	Sparse:             nil,
 	UnrecognizedOffset: unsafe.Offsetof(Small2{}.XXX_unrecognized),
@@ -291,6 +494,7 @@ func (m *Small2_G) MergeFullCustom(b []byte) error {
 			b = b[4:]
 			m.X = &v
 		default:
+			return proto.ErrInternalBadWireType
 		}
 	}
 	return nil
@@ -348,6 +552,7 @@ func (m *Small2_H) MergeFullCustom(b []byte) error {
 			v := int32(x>>1) ^ int32(x)<<31>>31
 			m.X = &v
 		default:
+			return proto.ErrInternalBadWireType
 		}
 	}
 	return nil
@@ -405,6 +610,7 @@ func (m *Inner2) MergeFullCustom(b []byte) error {
 			v := int64(x)
 			m.A = &v
 		default:
+			return proto.ErrInternalBadWireType
 		}
 	}
 	return nil
@@ -432,23 +638,32 @@ func init() {
 	proto.RegisterType((*Small2_G)(nil), "prototest.Small2.G")
 	proto.RegisterType((*Small2_H)(nil), "prototest.Small2.H")
 	proto.RegisterType((*Inner2)(nil), "prototest.Inner2")
+	proto.RegisterEnum("prototest.Small2_Enum", Small2_Enum_name, Small2_Enum_value)
 }
 
 func init() { proto.RegisterFile("proto2.proto", fileDescriptor0) }
 
 var fileDescriptor0 = []byte{
-	// 205 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x09, 0x6e, 0x88, 0x02, 0xff, 0x74, 0x8f, 0x31, 0x4e, 0xc3, 0x40,
-	0x10, 0x45, 0xf5, 0xbd, 0xc4, 0xe0, 0x49, 0x1a, 0x2f, 0x12, 0x1a, 0xd1, 0x30, 0xa4, 0x9a, 0x6a,
-	0x8b, 0xbd, 0x44, 0x42, 0x3b, 0x9c, 0x60, 0x93, 0x6c, 0x92, 0x22, 0xc4, 0xc8, 0xb8, 0xf0, 0xa9,
-	0x39, 0x03, 0x5a, 0x5b, 0x02, 0x0a, 0xa8, 0xbe, 0xde, 0xd7, 0xd3, 0xee, 0x1f, 0x5a, 0xbd, 0xf7,
-	0xdd, 0xd0, 0xc5, 0x30, 0x85, 0x6f, 0xa6, 0x18, 0xf2, 0xc7, 0xb0, 0xfe, 0x04, 0xd5, 0xaf, 0x6f,
-	0xe9, 0x72, 0x89, 0x7e, 0x45, 0x48, 0x0c, 0xa9, 0x74, 0x61, 0x48, 0x85, 0x76, 0x5c, 0x09, 0xf4,
-	0xd6, 0xb0, 0x2b, 0xb4, 0x67, 0x27, 0xd0, 0xc6, 0xb0, 0x2f, 0x74, 0xe0, 0x1b, 0x71, 0x0a, 0xc3,
-	0xc1, 0x3f, 0x11, 0x32, 0x2f, 0x04, 0xba, 0x8c, 0x6d, 0xf8, 0x7e, 0x39, 0xbc, 0x5c, 0xaf, 0xb9,
-	0x8f, 0x86, 0x5c, 0x84, 0x23, 0xd7, 0xe2, 0xfe, 0x11, 0x8e, 0xfe, 0x99, 0x70, 0xe2, 0x3b, 0x81,
-	0x52, 0xbc, 0xff, 0x25, 0xcc, 0xbb, 0xc2, 0xc6, 0x70, 0x2a, 0xca, 0x99, 0x49, 0xdc, 0xdf, 0xca,
-	0xd6, 0x70, 0x7e, 0x6c, 0x09, 0x9b, 0x32, 0x6d, 0xe4, 0x46, 0xa0, 0x95, 0x61, 0x2c, 0xd5, 0x76,
-	0xae, 0x96, 0x02, 0x6d, 0x0d, 0xe3, 0xfa, 0x81, 0xea, 0xf9, 0xe3, 0x9f, 0x7b, 0x9d, 0x21, 0x7d,
-	0x05, 0x00, 0x00, 0xff, 0xff, 0x7b, 0x49, 0x53, 0x11, 0x22, 0x01, 0x00, 0x00,
+	// 324 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x09, 0x6e, 0x88, 0x02, 0xff, 0x74, 0x91, 0xcf, 0x4e, 0xf2, 0x40,
+	0x14, 0xc5, 0x39, 0x1d, 0x5a, 0xbe, 0x5e, 0xf8, 0xb0, 0x8c, 0x86, 0xdc, 0xb8, 0xd0, 0x91, 0x18,
+	0x33, 0xab, 0x2e, 0x1a, 0x17, 0xc6, 0x9d, 0x18, 0x02, 0xba, 0x31, 0x19, 0x9f, 0xa0, 0x40, 0xf9,
+	0x27, 0x14, 0x83, 0xc5, 0xb4, 0xcf, 0xe6, 0xcb, 0x99, 0x69, 0x13, 0x35, 0x41, 0x57, 0x67, 0x7e,
+	0x37, 0xbf, 0xdc, 0xdc, 0x9c, 0xa1, 0xd6, 0xeb, 0x6e, 0x9b, 0x6d, 0xa3, 0xb0, 0x0c, 0xe9, 0x97,
+	0x91, 0x25, 0x6f, 0x59, 0xef, 0x43, 0x90, 0xf7, 0xbc, 0x89, 0xd7, 0xeb, 0x48, 0xb6, 0x08, 0x31,
+	0x43, 0x39, 0xda, 0x35, 0x88, 0x2d, 0x8d, 0xd9, 0x51, 0xd0, 0x0d, 0x83, 0xb1, 0xa5, 0x09, 0x0b,
+	0x05, 0xed, 0x1b, 0x4c, 0x2c, 0x4d, 0xb9, 0xae, 0x84, 0x86, 0xc1, 0x54, 0x9e, 0x13, 0x12, 0x76,
+	0x15, 0x74, 0x33, 0xea, 0x84, 0x5f, 0x9b, 0xc3, 0x87, 0x34, 0x4d, 0x76, 0x91, 0x41, 0x62, 0x85,
+	0x19, 0x7b, 0x4a, 0xfc, 0x21, 0xcc, 0xe4, 0x05, 0x61, 0xce, 0xff, 0x14, 0x34, 0x45, 0xc7, 0x3f,
+	0x84, 0xea, 0xae, 0x70, 0x68, 0x30, 0xb7, 0xca, 0x82, 0x49, 0x89, 0xdf, 0x95, 0x91, 0xc1, 0x42,
+	0x5e, 0x12, 0x96, 0xdc, 0x52, 0xd0, 0xed, 0xa8, 0x7b, 0xa8, 0x0c, 0xd2, 0xfd, 0xc6, 0x60, 0x29,
+	0xaf, 0x08, 0x2b, 0xfe, 0x5f, 0x1e, 0xc3, 0x87, 0xd6, 0xe3, 0x20, 0xcd, 0x76, 0x85, 0xc1, 0x4a,
+	0xb6, 0x09, 0x39, 0xb7, 0x15, 0xb4, 0x18, 0xd5, 0x0c, 0x72, 0xcb, 0x05, 0x1f, 0xd9, 0x06, 0x2c,
+	0x17, 0xa7, 0x1d, 0xc2, 0xd0, 0x16, 0x91, 0xb3, 0xaf, 0xa0, 0x1d, 0x83, 0xdc, 0x8e, 0x46, 0xd5,
+	0xa8, 0xa9, 0xa0, 0x3b, 0x76, 0x74, 0x4d, 0x5e, 0xb5, 0x52, 0x06, 0x24, 0x5e, 0x92, 0x82, 0xa1,
+	0xa0, 0x5d, 0x63, 0x9f, 0xf2, 0x84, 0xdc, 0xf7, 0x78, 0xbd, 0x4f, 0xca, 0x96, 0x7d, 0x53, 0xc1,
+	0xad, 0x73, 0x83, 0xde, 0x19, 0xd5, 0xed, 0xb9, 0xd2, 0x23, 0x67, 0x70, 0x17, 0xd4, 0xca, 0xec,
+	0x07, 0x28, 0xf3, 0x3e, 0x70, 0xfa, 0x0d, 0x72, 0x9f, 0xd2, 0x64, 0x3b, 0xeb, 0x75, 0xc9, 0xab,
+	0x5a, 0xfc, 0xfe, 0x3c, 0x61, 0x10, 0x7f, 0x06, 0x00, 0x00, 0xff, 0xff, 0xcc, 0x1f, 0x59, 0xc2,
+	0xef, 0x01, 0x00, 0x00,
 }

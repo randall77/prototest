@@ -11,6 +11,17 @@ message Small3 {
   repeated Inner3 f = 6;
   Group1 g = 8;
   repeated Group2 h = 9;
+      enum Enum {
+        EA = 0;
+        EB = 1;
+        EC = 2;
+      }
+  Enum i = 12;
+  map<int32,string> j = 13;
+  oneof Oneof {
+    int64 x = 14;
+    string y = 15;
+  }
 }
 message Inner3 {
   int64 a = 1;
