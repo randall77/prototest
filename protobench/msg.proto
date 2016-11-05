@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+package protobench;
+
+// This message is intentionally designed
+// so that it can parse without allocation.
+// Allocation is incredibly important, but it is
+// also noisy.  Nice to have one benchmark that
+// provides repeatable numbers.
+message A {
+	int64 f1 = 1;
+	int64 f2 = 2;
+	int32 f3 = 3;
+	bool f4 = 4;
+	float f5 = 5;
+	double f6 = 6;
+	fixed64 f7 = 7;
+	fixed32 f8 = 8;
+	sint32 f9 = 9;
+	sint64 f10 = 10;
+}
+
+// This message is designed to be more complicated.
+message B {
+	repeated int64 f1 = 1;
+	B2 f2 = 2;
+	repeated B2 f3 = 3;
+	string f4 = 4;
+}
+
+message B2 {
+	repeated float f1 = 1;
+	sint64 f2 = 2;
+	repeated B3 f3 = 3;
+}
+
+message B3 {
+	repeated string f1 = 1;
+	string f2 = 2;
+}
